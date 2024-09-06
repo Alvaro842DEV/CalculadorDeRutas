@@ -1,6 +1,8 @@
 use std::collections::{HashMap, HashSet, VecDeque};
 use std::f64;
 
+mod structures;
+
 #[derive(Debug)]
 struct Graph {
     adj_list: HashMap<usize, Vec<(usize, f64)>>,

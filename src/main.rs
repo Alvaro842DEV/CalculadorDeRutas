@@ -25,7 +25,7 @@ impl Graph {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq)]
 struct FrontierNode {
     id: usize,
     cost: f64,  

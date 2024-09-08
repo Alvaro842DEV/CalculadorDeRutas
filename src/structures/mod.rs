@@ -1,7 +1,5 @@
 use std::f64;
 
-
-
 #[derive(Debug, Clone)]
 struct SquareMatrix {
 	data: Vec<Vec<f64>>
@@ -38,15 +36,17 @@ impl SquareMatrix {
 
 
 #[derive(Debug, Clone)]
-pub struct Grafo {
+pub struct Grafo<T> {
 	cost_matrix: SquareMatrix,
+	nodes: Vec<T>,
 }
 
-impl Grafo {
-	pub fn new(n: usize) -> Self {
-		Grafo { cost_matrix: SquareMatrix::new(n) }
+impl<T> Grafo<T> {
+	pub fn new(n: usize, nodes: Vec<T>) -> Self {
+		Grafo { cost_matrix: SquareMatrix::new(n), nodes }
 	}
 
+	/// Returns the number of vertices the graph has
 	pub fn num_vert(&self) -> usize {
 		self.cost_matrix.dim()
 	}
@@ -57,6 +57,7 @@ impl Grafo {
 		}
 	}
 
+	/// Returns a vec with all reachable vertices from v
 	pub fn neighbours(&self, v: usize) -> Vec<(usize, f64)> {
 		self.cost_matrix
 			.data[v].clone()
@@ -69,5 +70,10 @@ impl Grafo {
 					None
 				}
 			}).collect()
+	}
+
+	/// Returns asociated node to the vertex idx
+	pub fn node(&self, idx: usize) -> Option<&T> {
+		self.nodes.get(idx)
 	}
 }

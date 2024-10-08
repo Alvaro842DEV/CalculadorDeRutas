@@ -44,7 +44,7 @@ cargo build
 ```
 
 ### Licencia
-Este proyecto está bajo la **licencia GPL v3**, tal como se especifica en el archivo `LICENSE`. Si deseas saber más sobre esta licencia y cómo cumplir con sus términos, puedes consultar el archivo [aquí](https://github.com/Alvaro842DEV/CalculadorDeRutas/blob/main/LICENSE).
+Este proyecto está bajo la **licencia GPL v3**, tal como se especifica en el archivo `LICENSE`. Si deseas saber más sobre esta licencia y cómo cumplir con sus términos, puedes consultar el archivo [aquí](https://github.com/Alvaro842DEV/CalculadorDeRutas/blob/main/LICENSE.md).
 
 ### Contribuciones
 

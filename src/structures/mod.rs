@@ -1,79 +1,50 @@
 use std::f64;
+use std::collections::{HashMap, HashSet};
 
 #[derive(Debug, Clone)]
-struct SquareMatrix {
-	data: Vec<Vec<f64>>
+pub struct Grafo {
+    edges: Vec<Vec<(usize, f64)>>,
+    nodes: Vec<(usize, usize)>,
+    regions: Vec<usize>,
+    region_boundaries: HashMap<usize, HashSet<usize>>,
 }
 
-impl SquareMatrix {
-	fn new(n: usize) -> Self {
-		SquareMatrix { data: vec![vec![f64::INFINITY; n]; n] }
-	}
+impl Grafo {
+    pub fn new(n: usize, nodes: Vec<(usize, usize)>) -> Self {
+        Grafo {
+            edges: vec![Vec::new(); n],
+            nodes,
+            regions: vec![0; n],
+            region_boundaries: HashMap::new(),
+        }
+    }
 
-	fn dim(&self) -> usize {
-		self.data.len()
-	}
+    pub fn num_vert(&self) -> usize {
+        self.nodes.len()
+    }
 
-	fn get_cell(&self, i: usize, j: usize) -> Option<f64> {
-		if !(self.valid(i) && self.valid(j)) { None }
-		else {
-			Some(self.data[i][j])
-		}
-	}
+    pub fn add_edge(&mut self, u: usize, v: usize, cost: f64) {
+        self.edges[u].push((v, cost));
+        self.edges[v].push((u, cost));
+    }
 
-	fn get_cell_mut(&mut self, i: usize, j: usize) -> Option<&mut f64> {
-		if !(self.valid(i) && self.valid(j)){ None }
-		else {
-			Some(&mut self.data[i][j])
-		}
-	}
+    pub fn neighbours(&self, v: usize) -> &[(usize, f64)] {
+        &self.edges[v]
+    }
 
+    pub fn node(&self, idx: usize) -> Option<&(usize, usize)> {
+        self.nodes.get(idx)
+    }
 
-	fn valid(&self, i: usize) -> bool {
-		i < self.dim()
-	}
-}
+    pub fn set_region(&mut self, node: usize, region: usize) {
+        self.regions[node] = region;
+    }
 
+    pub fn get_region(&self, node: usize) -> usize {
+        self.regions[node]
+    }
 
-#[derive(Debug, Clone)]
-pub struct Grafo<T> {
-	cost_matrix: SquareMatrix,
-	nodes: Vec<T>,
-}
-
-impl<T> Grafo<T> {
-	pub fn new(n: usize, nodes: Vec<T>) -> Self {
-		Grafo { cost_matrix: SquareMatrix::new(n), nodes }
-	}
-
-	/// Returns the number of vertices the graph has
-	pub fn num_vert(&self) -> usize {
-		self.cost_matrix.dim()
-	}
-
-	pub fn add_edge(&mut self, u: usize, v: usize, cost: f64) {
-		if let Some(x) = self.cost_matrix.get_cell_mut(u,v) {
-		    *x = cost
-		}
-	}
-
-	/// Returns a vec with all reachable vertices from v
-	pub fn neighbours(&self, v: usize) -> Vec<(usize, f64)> {
-		self.cost_matrix
-			.data[v].clone()
-			.into_iter()
-			.enumerate()
-			.filter_map(|(i,x)|{
-				if x != f64::INFINITY {
-					Some((i, x))
-				} else {
-					None
-				}
-			}).collect()
-	}
-
-	/// Returns asociated node to the vertex idx
-	pub fn node(&self, idx: usize) -> Option<&T> {
-		self.nodes.get(idx)
-	}
+    pub fn add_region_boundary(&mut self, region: usize, node: usize) {
+        self.region_boundaries.entry(region).or_default().insert(node);
+    }
 }
